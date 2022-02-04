@@ -228,9 +228,11 @@ engine_knitr_targets_interactive <- function(options) {
   out_message <- engine_knitr_run_message(options, message)
   options_make <- options
   code_library <- "library(targets)"
+  par_library <- "library(future)\nlibrary(future.callr)\nplan(callr)"
   code_make <- c("targets::tar_make_interactive(", deparse(options$code), ")")
   code_make <- paste(code_make, collapse = "")
   options_make$code <- paste(code_library, code_make, sep = "\n")
+ # options_make$code <- paste(code_library, par_library, code_make, sep = "\n")
   options_make$echo <- FALSE
   out_make <- knitr::knit_engines$get("R")(options = options_make)
   paste0(out_code, out_message, out_make)
@@ -289,7 +291,7 @@ engine_knitr_interactive_message <- function(options) {
   )
 }
 
-write_targets_r <- function(path_script) {
+write_targets_r <- function(path_script, parallel = NULL) {
   lines_new <- lines_targets_r(path_script)
   if (!file.exists(path_script)) {
     dir_create(dirname(path_script))
@@ -320,7 +322,8 @@ write_targets_r <- function(path_script) {
 
 lines_targets_r <- function(path_script) {
   path <- system.file(
-    file.path("pipelines", "_targets_r.R"),
+    #file.path("pipelines", "_targets_r.R"),
+    file.path("pipelines", "_targets_r_future_callr.R"),
     package = "targets",
     mustWork = TRUE
   )
