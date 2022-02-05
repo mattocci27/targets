@@ -323,7 +323,8 @@ write_targets_r <- function(path_script, parallel = NULL) {
 lines_targets_r <- function(path_script) {
   path <- system.file(
     #file.path("pipelines", "_targets_r.R"),
-    file.path("pipelines", "_targets_r_future_callr.R"),
+    #file.path("pipelines", "_targets_r_future_callr.R"),
+    file.path("pipelines", "_targets_r_clustermq.R"),
     package = "targets",
     mustWork = TRUE
   )
